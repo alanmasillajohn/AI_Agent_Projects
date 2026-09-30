@@ -1,0 +1,56 @@
+- PowerShell Terminal basic commands to get the program running - 
+
+# (But remember: you’ll need to fix the execution policy first, otherwise PowerShell will block it. 
+  Run this once in an Administrator PowerShell window:)
+
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned [This is for allowing access activating environments]
+
+ls
+cd "directory name to go to"
+cd .. (1 step back)
+mkdir "directory name of project"
+python -m venv venv (ask python to create a virtual environment (venv) called venv)
+
+venv\Scripts\Activate.ps1   (activating the virtual environment venv) 
+                            (to be done while in specific project folder and not venv folder which is inside it)
+
+# Now inside virtual environment
+
+pip install strands-agents[ollama]
+pip install strands-agents-tools
+
+- To check if packages installed (specific packages are required for specific packages) - inside environment run the code 
+
+pip list
+__________________________________________________________________________________________________________________
+
+# Now create .py file with the code for the strands-agents
+
+# Code for strands-agents
+
+from strands import Agent
+from strands.models.ollama import OllamaModel
+
+# Create an Ollama model instance
+
+ollama_model = OllamaModel(host = "http://localhost:11434",  # Ollama server address
+                           model_id = "llama3.1:8b")         # Specify which model to use
+
+--> You can also add callback_handler = None as a parameter too to stop automatic replies so 
+    that agent replies only when print statement is given as print(agent(user_input)) or if reply = agent(user_input) then print(reply).
+
+
+# Create an agent using the Ollama model
+
+agent = Agent(model = ollama_model,
+              system_prompt = "You are an helpful assistant who chats in a friendly way with the user.")
+
+# Use the agent
+
+while True:
+    user_input = input("\nUser:").strip()
+    print()
+
+    agent(user_input)
+    print()
+_____________________________________________________________________________________________________________________
